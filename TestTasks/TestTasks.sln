@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Task1", "TestTasks\TestTask
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Task2", "Task2\Task2.vcxproj", "{957A4ABE-2921-4DFB-A08D-6F0549A289A1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Task3", "Task3\Task3.vcxproj", "{1813F7F4-AFBE-4B03-9C83-48DC295A1722}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -21,6 +23,10 @@ Global
 		{957A4ABE-2921-4DFB-A08D-6F0549A289A1}.Debug|Win32.Build.0 = Debug|Win32
 		{957A4ABE-2921-4DFB-A08D-6F0549A289A1}.Release|Win32.ActiveCfg = Release|Win32
 		{957A4ABE-2921-4DFB-A08D-6F0549A289A1}.Release|Win32.Build.0 = Release|Win32
+		{1813F7F4-AFBE-4B03-9C83-48DC295A1722}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1813F7F4-AFBE-4B03-9C83-48DC295A1722}.Debug|Win32.Build.0 = Debug|Win32
+		{1813F7F4-AFBE-4B03-9C83-48DC295A1722}.Release|Win32.ActiveCfg = Release|Win32
+		{1813F7F4-AFBE-4B03-9C83-48DC295A1722}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
