@@ -46,7 +46,11 @@ void List::Serialize(ostream & stream) const
 
     { // Node serialization code
       const auto &that = *current; // It would be optimised by compiler
-      stream << reinterpret_cast<int>(&that) << reinterpret_cast<int>(that.rand);
+
+      // Store raw pointer for decrypt 'rand' in deserialization state
+      // Since sizeof int is equal to void * on most platforms
+      stream << reinterpret_cast<int>(&that);
+      stream << reinterpret_cast<int>(that.rand);
 
       stream << that.data.size(); // that faster
       stream << that.data << 0; // ASCII ONLY!!
@@ -106,13 +110,13 @@ void List::Deserialize(istream & stream)
     return;
   }
 
-  // Old one into new one
-  std::map<ListNode *, ListNode *> pointers;
+  // maps old one into new one
+  map<ListNode *, ListNode *> pointers;
 
   // Data Loading, rand pointers invalid
   for (auto i = 0; i < count; i++)
   {
-    std::unique_ptr<ListNode> tmp = make_unique<ListNode>();
+    unique_ptr<ListNode> tmp = make_unique<ListNode>();
     ListNode &that = *tmp;
     ListNode *old_invalid_pointer;
 
@@ -122,9 +126,8 @@ void List::Deserialize(istream & stream)
     stream >> reinterpret_cast<int &>(that.rand);
     DataDeserialize(stream, that.data);
 
-    PushBack(tmp.get());
-    // if no exception, then we could release storage
-    tmp.release();
+    static_assert(noexcept(PushBack(tmp.release())), "Hey, we assume that PushBack is exception safe!!");
+    PushBack(tmp.release()); // if no exception, then we could release holder
   }
 
   ListNode *p = head;
