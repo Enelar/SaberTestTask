@@ -23,7 +23,7 @@ ListIterator List::begin() const
 
 ListIterator List::end() const
 {
-  return{ tail };
+  return{ nullptr };
 }
 
 std::ostream &operator<<(std::ostream &stream, const List &list)

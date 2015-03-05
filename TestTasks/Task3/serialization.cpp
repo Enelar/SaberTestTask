@@ -57,7 +57,7 @@ void List::Serialize(ostream & stream) const
     }
     
     current = current->next; // Instead of current++
-  } while (current != tail);
+  } while (current != nullptr);
 }
 
 namespace
@@ -139,5 +139,5 @@ void List::Deserialize(istream & stream)
 
     p->rand = it->second;
     p = p->next;
-  } while (p != head);   // I assume that list is round robin.
+  } while (p != tail);   // I assume that list is round robin.
 }

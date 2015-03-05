@@ -39,11 +39,10 @@ void List::PushBack(ListNode *that) noexcept
     return;
   }
 
-  that->next = tail->next;
-  that->next->prev = that;
+  that->next = nullptr;
 
-  that->prev = tail;
   tail->next = that;
+  that->prev = tail;
 
   tail = that;
 }
