@@ -4,12 +4,14 @@ using namespace std;
 
 auto main()
 {
+  cout << "TASK 1" << endl;
+
   int num;
   cin >> num;
 
   auto still_saw_only_zeros = true;
   const auto bits_in_byte = 8;
-  auto current_bit = sizeof(num) * 8; // start from left
+  int current_bit = sizeof(num) * 8; // start from left
 
   while (--current_bit >= 0)
   {
