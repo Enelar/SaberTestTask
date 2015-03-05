@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="List.cpp" />
+    <ClCompile Include="List_debug.cpp" />
     <ClCompile Include="serialization.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>

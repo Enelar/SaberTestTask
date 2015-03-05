@@ -10,4 +10,6 @@ auto main()
     "YOU !!!",
     ":)))"
   };
+
+  std::cout << "Initial state" << std::endl << test;
 }
