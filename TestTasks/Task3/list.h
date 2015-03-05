@@ -16,9 +16,11 @@ public:
   void Serialize(std::ostream & stream) const;	// сохранение в файл
   void Deserialize(std::istream & stream);	// загрузка из файла
   struct general_serialzation_failure {};
+
+  List(std::initializer_list<std::string>);
 private:
   ListNode * 	head = nullptr;
   ListNode * 	tail = nullptr;
-  int 		count;
-  void PushBack(ListNode *);
+  int 		count = 0;
+  void PushBack(ListNode *) noexcept;
 };

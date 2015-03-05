@@ -79,7 +79,9 @@
     <ClInclude Include="list.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="list.cpp" />
+    <ClCompile Include="List.cpp" />
+    <ClCompile Include="serialization.cpp" />
+    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
