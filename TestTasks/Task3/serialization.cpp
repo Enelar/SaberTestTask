@@ -1,7 +1,12 @@
 #include "list.h"
 #include <map>
 #include <memory>
+#include <iterator>
 using namespace std;
+
+/* DISCLAIMER:
+ * For demonstration purposes i assumed that stream is NOT binary
+ */
 
 namespace
 {
@@ -14,9 +19,13 @@ namespace
 void List::Serialize(ostream & stream) const
 {
   // I hope that we need speed while we saving state
-  // It could be autosave in midgame, while player need PERFORMANCE
+  // because
+  // it could be autosave in midgame, while player need PERFORMANCE
+  // so
+  // i prefered speed than memory at this moment
+  // we will pay debt at deserialization
 
-  stream << magic_word << serialize_version;
+  stream << magic_word << ":" << serialize_version << ' ';
   stream << count;
 
   if (!head)
@@ -24,18 +33,10 @@ void List::Serialize(ostream & stream) const
   if (!tail)
     throw general_serialzation_failure();
 
-  if (head == tail)
-  {
-    if (count != 1)
-      throw general_serialzation_failure();
-    
-    stream << reinterpret_cast<int>(head->rand);
-    stream << head->data.length() << head->data << 0; // ASCII ONLY!!!
-    return;
-  }
-
   auto *current = head;
   auto counter = 0;
+
+  stream << "[";
 
   do
   {
@@ -49,15 +50,18 @@ void List::Serialize(ostream & stream) const
 
       // Store raw pointer for decrypt 'rand' in deserialization state
       // Since sizeof int is equal to void * on most platforms
-      stream << reinterpret_cast<int>(&that);
-      stream << reinterpret_cast<int>(that.rand);
+      stream << reinterpret_cast<int>(&that) << ' ';
+      stream << reinterpret_cast<int>(that.rand) << ' ';
 
-      stream << that.data.size(); // that faster
-      stream << that.data << 0; // ASCII ONLY!!
+      stream << that.data.size() << ' '; // that faster
+      stream << that.data; // ASCII ONLY!!
+      //stream << '|';
     }
     
     current = current->next; // Instead of current++
   } while (current != nullptr);
+
+  stream << "]";
 }
 
 namespace
@@ -66,11 +70,18 @@ namespace
   {
     int data_size;
     stream >> data_size;
+    stream.ignore(1); // since we in text mode :(
     if (data_size < 0)
       throw List::general_serialzation_failure();
     str.resize(data_size);
 
-    stream.getline(&str[0], data_size);
+    stream.read(&str[0], data_size);
+  }
+  ListNode *DeserializePointer(istream & stream)
+  {
+    int tmp;
+    stream >> tmp;
+    return reinterpret_cast<ListNode *>(tmp);
   }
 }
 
@@ -80,64 +91,58 @@ void List::Deserialize(istream & stream)
     throw general_serialzation_failure(); // out of task.
 
   { // Check that we could deserialize this
-    string they_saying;
-    they_saying.resize(magic_word.size());
-    stream.getline(&they_saying[0], magic_word.size());
-    if (they_saying != magic_word)
+    std::istream_iterator<char> it = stream;
+    bool is_equal = equal(magic_word.begin(), magic_word.end(), it);
+    if (!is_equal)
       throw general_serialzation_failure();
+
+    //char woot;
+    //copy(istream_iterator<char>(stream), istream_iterator<char>(), ostream_iterator<char>(cout));
 
     int version;
     stream >> version;
     if (version != serialize_version)
       throw general_serialzation_failure();
   }
-  
-  stream >> count;
 
-  if (!count)
-    return;
+  int serialized_count;
+  stream >> serialized_count;
 
-  if (count == 1)
-  {
-    tail = head = new ListNode; // POTENTIAL MEMLEAK
-    head->next = head->prev = head;
-    {
-      int rand_pointer;
-      stream >> rand_pointer;
-      head->rand = rand_pointer ? head : nullptr;
-    }
-    DataDeserialize(stream, head->data);
+  if (!serialized_count)
     return;
-  }
 
   // maps old one into new one
   map<ListNode *, ListNode *> pointers;
 
+  stream.ignore(1); // [
   // Data Loading, rand pointers invalid
-  for (auto i = 0; i < count; i++)
+  for (auto i = 0; i < serialized_count; i++)
   {
     unique_ptr<ListNode> tmp = make_unique<ListNode>();
     ListNode &that = *tmp;
-    ListNode *old_invalid_pointer;
+    ListNode *old_invalid_pointer = DeserializePointer(stream);
 
-    stream >> reinterpret_cast<int &>(old_invalid_pointer);
     pointers.insert({ old_invalid_pointer, &that });
 
-    stream >> reinterpret_cast<int &>(that.rand);
+    that.rand = DeserializePointer(stream);
     DataDeserialize(stream, that.data);
 
     static_assert(noexcept(PushBack(tmp.release())), "Hey, we assume that PushBack is exception safe!!");
     PushBack(tmp.release()); // if no exception, then we could release holder
   }
+  stream.ignore(1); // ]
 
   ListNode *p = head;
   do
   {
-    auto it = pointers.find(p->rand);
-    if (it == pointers.end())
-      throw general_serialzation_failure();
+    if (p->rand)
+    {
+      auto it = pointers.find(p->rand);
+      if (it == pointers.end())
+        throw general_serialzation_failure();
+      p->rand = it->second;
+    }
 
-    p->rand = it->second;
     p = p->next;
-  } while (p != tail);   // I assume that list is round robin.
+  } while (p != nullptr);
 }

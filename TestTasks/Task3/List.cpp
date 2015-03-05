@@ -33,9 +33,11 @@ void List::PushBack(ListNode *that) noexcept
   count++;
   that->rand = nullptr; // just in case.
 
+  that->next = nullptr;
   if (!tail)
   {
-    head = tail = that->next = that->prev = that;
+    head = tail = that;
+    that->prev = nullptr;
     return;
   }
 

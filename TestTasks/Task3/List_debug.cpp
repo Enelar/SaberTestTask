@@ -41,6 +41,6 @@ std::ostream &operator<<(std::ostream &stream, const List &list)
     // which causing O(N) for erasing(iterator). :(((
     stream << endl;
   }
-  stream << "==END LIST DEBUG INFO";
+  stream << "==END LIST DEBUG INFO" << endl;
   return stream;
 }
