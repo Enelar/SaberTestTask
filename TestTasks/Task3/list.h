@@ -27,6 +27,7 @@ public:
   struct nullptr_pointer {};
 
   List(std::initializer_list<std::string>);
+  void _DebugSetRandPointers();
 
   ListIterator begin() const;
   ListIterator end() const;

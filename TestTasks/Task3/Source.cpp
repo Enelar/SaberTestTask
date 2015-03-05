@@ -12,6 +12,7 @@ auto main()
     ":)))"
   };
 
+  test._DebugSetRandPointers();
   std::cout << "Initial state" << std::endl << test << std::endl;
 
   std::stringstream ss;

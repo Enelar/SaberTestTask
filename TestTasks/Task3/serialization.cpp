@@ -121,14 +121,14 @@ void List::Deserialize(istream & stream)
     unique_ptr<ListNode> tmp = make_unique<ListNode>();
     ListNode &that = *tmp;
     ListNode *old_invalid_pointer = DeserializePointer(stream);
+    ListNode *encrypted_rand_pointer = DeserializePointer(stream);
+    DataDeserialize(stream, that.data);
 
     pointers.insert({ old_invalid_pointer, &that });
 
-    that.rand = DeserializePointer(stream);
-    DataDeserialize(stream, that.data);
-
     static_assert(noexcept(PushBack(tmp.release())), "Hey, we assume that PushBack is exception safe!!");
     PushBack(tmp.release()); // if no exception, then we could release holder
+    tail->rand = encrypted_rand_pointer;
   }
   stream.ignore(1); // ]
 

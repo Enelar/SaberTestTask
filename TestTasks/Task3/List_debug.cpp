@@ -1,4 +1,5 @@
 #include "list.h"
+#include <random>
 
 using namespace std;
 
@@ -43,4 +44,31 @@ std::ostream &operator<<(std::ostream &stream, const List &list)
   }
   stream << "==END LIST DEBUG INFO" << endl;
   return stream;
+}
+
+void List::_DebugSetRandPointers()
+{
+  if (head == nullptr)
+    return;
+
+  std::default_random_engine generator;
+  std::uniform_int_distribution<int> offsets(0, count - 1);
+
+  auto GetPointer = [this](int offset)
+  {
+    auto *p = head;
+
+    while (offset-- > 0)
+      p = p->next;
+    return p;
+  };
+
+  std::cout << "ROLLIN: ";
+  for (auto &node : *this)
+  {
+    int roll = offsets(generator);
+    std::cout << roll << " ";
+    node.rand = GetPointer(roll);
+  }
+  std::cout << std::endl;
 }
