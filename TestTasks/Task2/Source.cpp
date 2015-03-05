@@ -45,6 +45,5 @@ auto main()
   cin.getline(test_string.get(), example_size);
   RemoveDups(test_string.get());
 
-  // Out of task, we COULD use that COSTLY copying.
-  cout << (string)test_string.get();
+  cout << (const char *)test_string.get();
 }
