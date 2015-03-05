@@ -6,7 +6,7 @@
 struct ListNode {
   ListNode * 	prev = nullptr;
   ListNode * 	next = nullptr;
-  ListNode * 	rand = nullptr; // указатель на произвольный элемент данного списка
+  ListNode * 	rand = nullptr; // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РїСЂРѕРёР·РІРѕР»СЊРЅС‹Р№ СЌР»РµРјРµРЅС‚ РґР°РЅРЅРѕРіРѕ СЃРїРёСЃРєР°
   std::string 	data;
 };
 
@@ -20,8 +20,8 @@ struct ListIterator
 
 class List {
 public:
-  void Serialize(std::ostream & stream) const;	// сохранение в файл
-  void Deserialize(std::istream & stream);	// загрузка из файла
+  void Serialize(std::ostream & stream) const;	// СЃРѕС…СЂР°РЅРµРЅРёРµ РІ С„Р°Р№Р»
+  void Deserialize(std::istream & stream);	// Р·Р°РіСЂСѓР·РєР° РёР· С„Р°Р№Р»Р°
   struct general_serialzation_failure {};
   struct fatal_codestyle_issue {};
   struct nullptr_pointer {};
