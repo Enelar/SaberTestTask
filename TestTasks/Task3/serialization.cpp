@@ -66,7 +66,7 @@ void List::Serialize(ostream & stream) const
 
 namespace
 {
-  void DataDeserialize(istream & stream, string & str)
+  void DeserializeData(istream & stream, string & str)
   {
     int data_size;
     stream >> data_size;
@@ -122,7 +122,7 @@ void List::Deserialize(istream & stream)
     ListNode &that = *tmp;
     ListNode *old_invalid_pointer = DeserializePointer(stream);
     ListNode *encrypted_rand_pointer = DeserializePointer(stream);
-    DataDeserialize(stream, that.data);
+    DeserializeData(stream, that.data);
 
     pointers.insert({ old_invalid_pointer, &that });
 
