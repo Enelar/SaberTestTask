@@ -10,13 +10,6 @@ struct ListNode {
   std::string 	data;
 };
 
-struct ListIterator
-{
-  ListNode *containee;
-  ListIterator &operator++();
-  operator ListNode*() const;
-};
-
 
 class List {
 public:
@@ -27,17 +20,10 @@ public:
   struct nullptr_pointer {};
 
   List(std::initializer_list<std::string>);
-  void _DebugSetRandPointers();
 
-  ListIterator begin() const;
-  ListIterator end() const;
 private:
   ListNode * 	head = nullptr;
   ListNode * 	tail = nullptr;
   int 		count = 0;
   void PushBack(ListNode *) noexcept;
-
-  friend std::ostream  &operator<<(std::ostream  &, const List &);
 };
-
-std::ostream &operator<<(std::ostream &, const List &);
