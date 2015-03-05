@@ -1,5 +1,5 @@
 #include "list.h"
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <iterator>
 using namespace std;
@@ -22,7 +22,7 @@ void List::Serialize(ostream & stream) const
   // because
   // it could be autosave in midgame, while player need PERFORMANCE
   // so
-  // i prefered speed than memory at this moment
+  // i prefered speed over memory at this moment
   // we will pay debt at deserialization
 
   stream << magic_word << ":" << serialize_version << ' ';
@@ -112,7 +112,7 @@ void List::Deserialize(istream & stream)
     return;
 
   // maps old one into new one
-  map<ListNode *, ListNode *> pointers;
+  unordered_map<ListNode *, ListNode *> pointers(serialized_count);
 
   stream.ignore(1); // [
   // Data Loading, rand pointers invalid
